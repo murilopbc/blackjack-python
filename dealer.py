@@ -1,43 +1,37 @@
 import random
-from jogador import Jogador
 
 
 class Dealer:
-    def __init__(self, identificacao):
-        self.cartas = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Q', 'J', 'K', 'A']
+    def __init__(self, identificacao: str):
+        self.cartas = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Q', 'J', 'K']
         self.identificacao = identificacao
 
-    def distribuir_carta(self):
+    def distribuirCarta(self, jogador):
+        jogadorCarta = []
+
+        for i in range(2):
+            carta = random.choice(self.cartas)
+            jogadorCarta.append(carta)
+            self.cartas.remove(carta)
+        jogador.setCartas(jogadorCarta)
+    def comprarCarta(self):
         carta = random.choice(self.cartas)
         return carta
 
     def vencedor(self, jogadores):
-        maior_pontuacao = -1
-        nome_vencedor = None
+        vencedor = None
+        maiorPontuacao = -1
 
         for jogador in jogadores:
             pontos = jogador.total_cartas()
-            if pontos == 21:
-                nome_vencedor = jogador.nome
-                return nome_vencedor
-            elif pontos < 21 and pontos > maior_pontuacao:
-                maior_pontuacao = pontos
-                nome_vencedor = jogador.nome
+            if pontos > maiorPontuacao and pontos <= 21:
+                maiorPontuacao = pontos
+                vencedor = jogador.nome
 
-        return nome_vencedor
-
-    def perdedor(self, jogadores):
-        menor_pontuacao = 0
-        nome_perdedor = None
-
+        return f"Jogador Vencedor: {vencedor}\nPontos: {maiorPontuacao}"
+    def parar(self, jogadores):
         for jogador in jogadores:
-            pontos = jogador.total_cartas()
-            if pontos > 21:
-                return jogador.nome
+            if jogador.getJogou() == False:
+                return False
+        return True
 
-    def empate(self, jogadores):
-        pontos_jogadores = [jogador.total_cartas() for jogador in jogadores]
-        if len(set(pontos_jogadores)) == 1:
-            return "Empate"
-
-        return None
