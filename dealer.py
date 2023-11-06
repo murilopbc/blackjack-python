@@ -24,7 +24,7 @@ class Dealer:
                 maiorPontuacao = pontos
                 vencedor = jogador.getNome()
 
-        return f"Jogador Vencedor: {vencedor}\nPontos: {maiorPontuacao}"
+        return f"\nJogador Vencedor: {vencedor}\nPontos: {maiorPontuacao}"
 
     def pararam(self, jogadores):
         for jogador in jogadores:
