@@ -1,69 +1,106 @@
 from dealer import Dealer
 from jogador import Jogador
-# criação do dealer
+
+
 dealer = Dealer("Croupier")
-# criação da lista jogadores
+# CRIAÇÃO DA LISTA DE JOGADORES E DE APOSTAS
+
 jogadores = []
-# criação do while true > enquanto (loop)
+apostas = []
+
+# INÍCIO DO JOGO - INPUT DE NOME E IDADE
+
 while True:
-    # input do usuário sobre a quantidade de jogadores
-    qtd_jogadores = int(input("Quantos jogadores participarão?: "))
-    # condição se a quantidade de jogadores for = ou > que 2
+    print("\nWELCOME TO BLACKJACK!!!\n")
+    qtd_jogadores = int(input("Digite a quantide de jogadores: "))
     if qtd_jogadores >= 2:
         for i in range(qtd_jogadores):
-            # input de nome e idade
             nome = input(f"\nDigite o nome do Jogador {i + 1}: ")
             idade = int(input(f"Digite a idade do Jogador {i + 1}: "))
             if idade < 18:
-                # se o jogador for de menor ele não poderá jogar
                 print("Você é de menor! Não é permitido jogar")
                 exit()
             else:
-                # senão o dealer vai distribuir as 2 cartas inicias para cada jogador
                 jogador = Jogador(nome, idade)
-                jogador.cartas = [dealer.distribuirCarta(jogador), dealer.distribuirCarta(jogador)]
+                jogador.cartas = [dealer.distribuirCarta(), dealer.distribuirCarta()]
                 jogadores.append(jogador)
-        # exibir o nome, as cartas, e a pontuação de cada jogador
+# APOSTA
+                while True:
+                    opcao = input("Você deseja apostar?: ")
+                    if opcao == 'sim':
+                        jogadores[i].apostou = True
+                        print(f"Você tem {jogadores[i].saldo} reais de saldo!")
+                        valor = float(input("Insira o valor da aposta: "))
+                        if valor <= jogadores[i].saldo:
+                            jogadores[i].saldo -= valor
+                            apostas.append(valor)
+                            print(f"{jogadores[i].getNome()}, você apostou {valor} reais")
+                            break
+                        else:
+                            print("Saldo Insuficiente!")
+                    elif opcao == 'não':
+                        print("Ok, sem problemas!")
+                        break
+                    else:
+                        print("Valor Inválido! Digite 'sim' ou 'não' para continuar! ")
+
+# EXIBIR O NOME, AS CARTAS E A PONTUAÇÃO INICIAL DE CADA JOGADOR
+
         for jogador in jogadores:
             print(f"\nJogador: {jogador.getNome()}")
             print(f"Cartas: {jogador.cartas}")
             print(f"Pontuação: {jogador.totalCartas()}")
 
+# NÃO É POSSIVEL JOGAR SOZINHO
+
     else:
-        # condição se o usuário digitar um valor menor que 2 : não tem como jogar o jogo com 1 jogador!
         print("Valor inválido!!!")
         break
 
+# INPUT DE 'PEDIR' OU 'PASSAR' A CARTA
+# JOGADOR ACUMULA SEUS PONTOS
+
     for i in range(qtd_jogadores):
         while True:
-
             if dealer.pararam(jogadores):
                 break
-            # jogador tem duas opções: pedir ou passar. Se ele pedir ele vai acumulando os pontos
             acao = int(input(f"\n{jogadores[i].getNome()}, digite '1' para pedir a carta ou '2' para passar sua vez: "))
             if acao == 1:
-                carta = dealer.distribuirCarta(Jogador)
+                carta = dealer.distribuirCarta()
                 jogadores[i].cartas.append(carta)
                 print(f"\nJogador: {jogadores[i].getNome()}")
                 print(f"Cartas: {jogadores[i].cartas}")
                 print(f"Pontuação: {jogadores[i].totalCartas()}")
-                # se o jogador alcançar 21 ele ganha
+
+# SE O JOGADOR FAZER 21 PONTOS, ELE GANHA O JOGO
+
                 if jogadores[i].totalCartas() == 21:
+                    print(dealer.vencedor(jogadores, apostas))
                     print(f"Jogador(a) {jogadores[i].getNome()} venceu o jogo!")
+                    print(f"Saldo final: {jogadores[i].saldo}")
                     exit()
-                # se estiver jogando entre 2 jogadores, quando um jogador perder o outro jogador automaticamente ganhará
+
+# CONDIÇÃO VÁLIDA QUANDO ESTIVER JOGANDO APENAS 2 JOGADORES: QUANDO UM GANHA O OUTRO PERDE AUTOMATICAMENTE
+
                 elif qtd_jogadores == 2 and jogadores[i].totalCartas() > 21:
                     print("Você perdeu!\n\n")
-                    print(dealer.vencedor(jogadores))
+                    print(dealer.vencedor(jogadores, apostas))
                     exit()
-                # se um jogador ultrapassar mais que 21 pontos ele perde
+
+# SE O JOGADOR ULTRAPASSAR 21 PONTOS, ELE PERDE
+
                 elif jogadores[i].totalCartas() > 21:
                     print(f"\n{jogadores[i].getNome()}, você perdeu, pois seus pontos ultrapassaram 21!\n")
                     break
-            # jogador escolheu parar. Ele não terá mais chance de jogar novamente
+
+# JOGADOR ESCOLHEU 'PASSAR' A VEZ
+
             if acao == 2:
-                jogadores[i].jogou(True)
+                # jogadores[i].jogou(True)
                 break
-    # função do jogador vencedor
-    print(dealer.vencedor(jogadores))
+
+# FUNÇÃO DO JOGADOR VENCEDOR
+# EXIBE O NOME, A PONTUAÇÃO FINAL E O SALDO DA APOSTA
+
+    print(dealer.vencedor(jogadores, apostas))
     break
