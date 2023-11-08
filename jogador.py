@@ -15,7 +15,7 @@ class Jogador:
     def getNome(self):
         return self.__nome
 
-# FUNÇÃO GET PARA ACESSARA IDADE
+# FUNÇÃO GET PARA ACESSAR A IDADE
 
     def getIdade(self):
         return self.__idade
@@ -32,9 +32,3 @@ class Jogador:
             else:
                 valor_total += carta
         return valor_total
-
-    def jogou(self, tf):
-        self.parou = tf
-
-    def getJogou(self):
-        return self.parou

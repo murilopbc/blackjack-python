@@ -34,6 +34,9 @@ class Dealer:
 
         vencedor.saldo = sum(apostas)
 
+
+# SE O VENCEDOR APOSTOU, ELE GANHA A APOSTA
+
         if vencedor.apostou:
             return f"\nVencedor: {vencedor.getNome()}\nPontos: {maiorPontuacao}\nSaldo final: R${vencedor.saldo}"
         else:

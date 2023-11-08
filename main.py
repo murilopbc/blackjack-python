@@ -1,8 +1,10 @@
 from dealer import Dealer
 from jogador import Jogador
 
+# CRIAÇÃO DO DEALER
 
 dealer = Dealer("Croupier")
+
 # CRIAÇÃO DA LISTA DE JOGADORES E DE APOSTAS
 
 jogadores = []
@@ -12,7 +14,7 @@ apostas = []
 
 while True:
     print("\nWELCOME TO BLACKJACK!!!\n")
-    qtd_jogadores = int(input("Digite a quantide de jogadores: "))
+    qtd_jogadores = int(input("Digite a quantidade de jogadores: "))
     if qtd_jogadores >= 2:
         for i in range(qtd_jogadores):
             nome = input(f"\nDigite o nome do Jogador {i + 1}: ")
@@ -83,7 +85,7 @@ while True:
 # CONDIÇÃO VÁLIDA QUANDO ESTIVER JOGANDO APENAS 2 JOGADORES: QUANDO UM GANHA O OUTRO PERDE AUTOMATICAMENTE
 
                 elif qtd_jogadores == 2 and jogadores[i].totalCartas() > 21:
-                    print("Você perdeu!\n\n")
+                    print("Você perdeu!\n")
                     print(dealer.vencedor(jogadores, apostas))
                     exit()
 
@@ -96,7 +98,6 @@ while True:
 # JOGADOR ESCOLHEU 'PASSAR' A VEZ
 
             if acao == 2:
-                # jogadores[i].jogou(True)
                 break
 
 # FUNÇÃO DO JOGADOR VENCEDOR
